@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20230719-01
+      author: elgunmahmudov
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: user_name
+                  value: admin
+              - column:
+                  name: password
+                  value: @Ingress12
+              - column:
+                  name: mail
+                  value: elgunmahmudov04@mail.eu
+              - column:
+                  name: verification_email
+                  value: elgunmahmudov04@mail.ru
+              - column:
+                  name: verification_code
+                  value: e1l2g3u4n5!!!-??

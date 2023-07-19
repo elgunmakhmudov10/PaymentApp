@@ -1,0 +1,25 @@
+
+server:
+  port: 2222
+
+spring:
+  application:
+    name: PaymentApp
+  datasource:
+    password: password
+    url: jdbc:postgresql://localhost:9999/postgres
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: true
+  security:
+    secret: SGVsbG8gbXkgQVBJIFdlbGNvbWUgbmUgZnVuY3Rapplicationpb25hbGl0eSBBcHBsaWNhdGlvbg==
+
+
+    redis:
+      host: ${WEB_FORM_REDIS_HOST:localhost}
+      port: ${WEB_FORM_REDIS_HOST:6379}
+      username: ${WEB_FORM_REDIS_HOST:}
+      password: ${WEB_FORM_REDIS_HOST:}
