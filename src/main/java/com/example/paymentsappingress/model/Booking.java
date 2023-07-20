@@ -26,8 +26,8 @@ public class Booking implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String bookingDate;
-    Double totalCost;
-    private  CourseType courseType;
+    String totalCost;
+    CourseType courseType;
 
 
     @ManyToOne

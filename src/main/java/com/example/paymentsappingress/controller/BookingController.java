@@ -2,6 +2,7 @@ package com.example.paymentsappingress.controller;
 
 import com.example.paymentsappingress.dto.request.BookingRequest;
 import com.example.paymentsappingress.dto.response.BookingResponse;
+import com.example.paymentsappingress.model.CourseType;
 import com.example.paymentsappingress.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,10 +30,15 @@ public class BookingController {
 
     @PostMapping("/payments/{paymentId}/users/{userId}")
     public ResponseEntity<BookingResponse> save(@RequestBody BookingRequest bookingRequest,
-                                                @PathVariable Long paymentId,
                                                 @PathVariable Long userId) {
-        return new ResponseEntity<>(bookingService.save(bookingRequest, paymentId, userId), HttpStatus.CREATED);
+        return new ResponseEntity<>(bookingService.save(bookingRequest,  userId), HttpStatus.CREATED);
     }
+    @PutMapping("/{bookingId}")
+    public ResponseEntity<BookingResponse> update(@PathVariable Long bookingId,
+                                                  @RequestBody BookingRequest bookingRequest) {
+        return new ResponseEntity<>(bookingService.update(bookingRequest, bookingId), HttpStatus.ACCEPTED);
+    }
+
 
     @DeleteMapping("/{bookingId}")
     public void delete(@PathVariable Long bookingId) {

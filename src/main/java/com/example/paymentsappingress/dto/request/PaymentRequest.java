@@ -2,16 +2,16 @@ package com.example.paymentsappingress.dto.request;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-
+@NoArgsConstructor
 public class PaymentRequest {
 
-    private Double paymentAmount;
+    String paymentAmount;
 
-    private String paymentMethod;
+    String paymentMethod;
 
-    private String paymentDate;
+     String paymentDate;
 
 }

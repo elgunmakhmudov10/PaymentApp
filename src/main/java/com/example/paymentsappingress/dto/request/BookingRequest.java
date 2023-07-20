@@ -1,11 +1,19 @@
 package com.example.paymentsappingress.dto.request;
 
+import com.example.paymentsappingress.dto.response.PaymentResponse;
+import com.example.paymentsappingress.model.CourseType;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
-@Builder
+
+@NoArgsConstructor
 public class BookingRequest {
-    private String bookingDate;
-    private Double totalCost;
+     String bookingDate;
+     String totalCost;
+     CourseType courseType;
+     List<CourseType> courseTypeList;
 }

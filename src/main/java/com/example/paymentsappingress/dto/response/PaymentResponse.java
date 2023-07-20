@@ -2,21 +2,20 @@ package com.example.paymentsappingress.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
-@Builder
-
+@NoArgsConstructor
 public class PaymentResponse implements Serializable {
     public static final long serialVersionUID = 1234123456123L;
 
-    private Long id;
+     Long id;
 
-    private Double paymentAmount;
+     String paymentAmount;
+     String paymentMethod;
 
-    private String paymentMethod;
-
-    private String paymentDate;
+     String paymentDate;
 
 }

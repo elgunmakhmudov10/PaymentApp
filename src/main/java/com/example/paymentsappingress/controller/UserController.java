@@ -17,66 +17,35 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-    private final UserService userService;
-
+    private final  UserService userService;
 
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserRegisterDto createUserDto) {
-        if (userService.getOneUserByUserName(createUserDto.getUserName()) != null) {
-            return new ResponseEntity<>("Username already in use!", HttpStatus.BAD_REQUEST);
-        }
-        if (userService.getOneUserByEmail(createUserDto.getMail()) != null) {
-            return new ResponseEntity<>("Email already in use", HttpStatus.BAD_REQUEST);
-        }
-        if (!userService.validatePassword(createUserDto)) {
-            return new ResponseEntity<>("Password is different from Confirm Password", HttpStatus.BAD_REQUEST);
-        }
-        userService.registerUser(createUserDto);
-        return new ResponseEntity<>("You Are Successfully Registered", HttpStatus.CREATED);
+    public ResponseEntity<String> registerUser(@RequestBody UserRegisterDto userDto) {
+
+        userService.register(userDto);
+
+        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody UserLoginDto userLoginDto) {
-        if (userService.getOneUserByUserName(userLoginDto.getUserName()) == null) {
-            return new ResponseEntity<>("Username not found", HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> loginUser(@RequestBody UserLoginDto loginDto) {
+
+        if (userService.login(loginDto)) {
+            return new ResponseEntity<>("User login successfully", HttpStatus.CREATED);
+
         }
-        if (!userService.loginUser(userLoginDto)) {
-            return new ResponseEntity<>("Unauthorized Login", HttpStatus.UNAUTHORIZED);
-        } else return new ResponseEntity<>("You Are Successfully Login", HttpStatus.OK);
+
+        return new ResponseEntity<>("Password or username is incorrect", HttpStatus.UNAUTHORIZED);
     }
 
-    @PutMapping("/resetPasswordByEmail")
-    public ResponseEntity<String> resetPasswordByVerificationEmail(@RequestBody UserPasswordResetDto passwordResetDto) {
-        if (!userService.validateVerificationEmail(passwordResetDto)) {
-            return new ResponseEntity<>("Verification Email is incorrect", HttpStatus.NOT_FOUND);
-        }
-        if (!passwordResetDto.getPassword().equals(passwordResetDto.getConfirmPassword())) {
-            return new ResponseEntity<>("Password is different from Confirm Password", HttpStatus.BAD_REQUEST);
-        }
-        userService.resetPassword(passwordResetDto);
-        return new ResponseEntity<>("Password changed successfully",HttpStatus.OK);
+    @PostMapping("/reset")
+    public ResponseEntity<String> resetPassword(@RequestBody UserPasswordResetDto resetPasswordDto, @RequestParam("email") String email) {
+        userService.resetPassword(resetPasswordDto, email);
+
+        return new ResponseEntity<>("Password reset successfully", HttpStatus.CREATED);
     }
 
-    @PutMapping("/resetPasswordByCode")
-    public ResponseEntity<String> resetPasswordByVerificationCode(@RequestBody UserPasswordResetDto passwordResetDto) {
-        if (!userService.validateVerificationCode(passwordResetDto)) {
-            return new ResponseEntity<>("Verification Code is incorrect", HttpStatus.NOT_FOUND);
-        }
-        if (!passwordResetDto.getPassword().equals(passwordResetDto.getConfirmPassword())) {
-            return new ResponseEntity<>("Password is different from Confirm Password", HttpStatus.BAD_REQUEST);
-        }
-        userService.resetPassword(passwordResetDto);
-        return new ResponseEntity<>("Password changed successfully",HttpStatus.OK);
-    }
-
-
-
-
-    @GetMapping("/register")
-    public ResponseEntity<String> register() {
-        return ResponseEntity.ok("Successfully registered");
-    }
 
     @GetMapping
     public ResponseEntity<List<UserResponse>> findAll() {

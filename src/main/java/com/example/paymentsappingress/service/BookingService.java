@@ -3,6 +3,7 @@ package com.example.paymentsappingress.service;
 import com.example.paymentsappingress.dto.request.BookingRequest;
 import com.example.paymentsappingress.dto.response.BookingResponse;
 import com.example.paymentsappingress.model.Booking;
+import com.example.paymentsappingress.model.CourseType;
 import com.example.paymentsappingress.model.Payment;
 import com.example.paymentsappingress.model.User;
 import com.example.paymentsappingress.repository.BookingRepository;
@@ -67,15 +68,13 @@ public class BookingService {
 
     }
 
-    public BookingResponse save(BookingRequest bookingRequest, Long paymentId, Long userId) {
-        Payment payment = paymentRepository.findById(paymentId).orElseThrow(() -> new RuntimeException(
-                String.format("Booking not found by id -%s", paymentId)
-        ));
+    public BookingResponse save(BookingRequest bookingRequest, Long userId  ) {
+
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(
-                String.format("Payment not found by id -%s", userId)
+                String.format("User not found by id -%s", userId)
         ));
+
         Booking booking = modelMapper.map(bookingRepository, Booking.class);
-        booking.setPayment(payment);
         booking.setUser(user);
         return modelMapper.map(bookingRepository.save(booking), BookingResponse.class);
     }

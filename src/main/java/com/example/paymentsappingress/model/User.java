@@ -26,6 +26,7 @@ public class User {
     String mail;
     String phoneNumber;
     private String  password;
+    private String repeatPassword;
     private String verificationEmail;
     private String verificationCode;
 

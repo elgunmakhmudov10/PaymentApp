@@ -20,62 +20,46 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserService implements IUserService {
+public class UserService {
+
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    @Override
-    public void registerUser(UserRegisterDto UserRegisterDto) {
-        User user = modelMapper.map(UserRegisterDto, User.class);
+    public void register(UserRegisterDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+
+        if (!user.getPassword().equals(user.getRepeatPassword())) {
+            throw new RuntimeException("Repeat Password Correctly");
+        }
+
+        if (userRepository.existsByMail(userDto.getMail())) {
+            throw new RuntimeException("Email Already exists");
+        }
+
         userRepository.save(user);
+
     }
 
-    @Override
-    public boolean loginUser(UserLoginDto userLoginDto) {
-        User user = userRepository.findByUserName(userLoginDto.getUserName());
-        if (user.getPassword().equals(userLoginDto.getPassword())) {
-            return true;
-        } else return false;
+    public boolean login(UserLoginDto loginDto) {
+        User user = userRepository.findByUserName(loginDto.getUserName());
+
+        if (user == null) {
+            throw new RuntimeException("Not found username " + loginDto.getUserName());
+        }
+
+        return user.getPassword().equals(loginDto.getPassword());
     }
 
-    @Override
-    public void resetPassword(UserPasswordResetDto passwordResetDto) {
-        User user = userRepository.findByMail(passwordResetDto.getMail());
-        user.setPassword(passwordResetDto.getPassword());
+    public void resetPassword(UserPasswordResetDto resetPasswordDto, String email) {
+        User user = userRepository.findByMail(resetPasswordDto.getMail());
+
+        if (!user.getMail().equals(email)) {
+            throw new RuntimeException("Invalid email");
+        }
+
+        user.setPassword(resetPasswordDto.getNewPassword());
+
         userRepository.save(user);
-    }
-
-    @Override
-    public User getOneUserByUserName(String username) {
-        return userRepository.findByUserName(username);
-    }
-
-    @Override
-    public User getOneUserByEmail(String email) {
-        return userRepository.findByMail(email);
-    }
-
-    @Override
-    public boolean validatePassword(UserRegisterDto UserRegisterDto) {
-        if (UserRegisterDto.getPassword().equals(UserRegisterDto.getConfirmPassword())) {
-            return true;
-        } else return false;
-    }
-
-    @Override
-    public boolean validateVerificationEmail(UserPasswordResetDto passwordResetDto) {
-        User user = userRepository.findByMail(passwordResetDto.getMail());
-        if (user.getVerificationEmail().equals(passwordResetDto.getVerificationEmail())) {
-            return true;
-        } else return false;
-    }
-
-    @Override
-    public boolean validateVerificationCode(UserPasswordResetDto passwordResetDto) {
-        User user = userRepository.findByMail(passwordResetDto.getMail());
-        if (user.getVerificationCode().equals(passwordResetDto.getVerificationCode())) {
-            return true;
-        } else return false;
     }
 
 

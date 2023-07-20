@@ -3,22 +3,25 @@ package com.example.paymentsappingress.dto.response;
 import com.example.paymentsappingress.model.CourseType;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Data
-@Builder
+
+@NoArgsConstructor
 public class BookingResponse implements Serializable {
     public static final long serialVersionUID = 1234123456123L;
 
-    private Long id;
+    Long id;
 
-    private String bookingDate;
+    String bookingDate;
 
-    private Double totalCost;
+    String totalCost;
 
-    private PaymentResponse payment;
-    private List<CourseType> courseTypeList;
+    PaymentResponse payment;
+    CourseType courseType;
+    List<CourseType> courseTypeList;
 }
 
